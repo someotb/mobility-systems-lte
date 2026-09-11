@@ -1,3 +1,6 @@
+mod utils;
+
 fn main() {
-    println!("Hello, world!");
+    let samples = utils::read_file("data/lte_pss_sss_pbch_iq_s16le.pcm");
+    println!("{:?}", samples);
 }
