@@ -11,8 +11,8 @@ pub fn read_file(filename: &str) -> Vec<Complex64> {
     let bytes = fs::read(filename).unwrap();
     let mut samples: Vec<Complex64> = Vec::new();
     for chunk in bytes.chunks(4) {
-        let i = i16::from_le_bytes([bytes[0], bytes[1]]) as f64;
-        let q = i16::from_le_bytes([bytes[2], bytes[3]]) as f64;
+        let i = i16::from_le_bytes([chunk[0], chunk[1]]) as f64;
+        let q = i16::from_le_bytes([chunk[2], chunk[3]]) as f64;
         samples.push(Complex64::new(i, q));
     }
     samples
