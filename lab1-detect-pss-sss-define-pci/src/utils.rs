@@ -39,3 +39,25 @@ pub fn generate_pss(nid: Nid2) -> Vec<Complex64> {
     }
     d_u
 }
+
+pub fn correlator(pattern: &[Complex64], samples: &[Complex64]) -> (usize, f64) {
+    let m = pattern.len();
+    assert!(samples.len() >= m, "samples shorter than pattern");
+
+    let correlations: Vec<Complex64> = (0..=samples.len() - m)
+        .map(|k| {
+            pattern
+                .iter()
+                .zip(samples[k..k + m].iter())
+                .map(|(p, s)| p.conj() * s)
+                .sum()
+        })
+        .collect();
+
+    let (peak_idx, peak_val) = correlations
+        .iter()
+        .enumerate()
+        .max_by(|(_, a), (_, b)| a.norm().partial_cmp(&b.norm()).unwrap())
+        .unwrap();
+    (peak_idx, peak_val.norm())
+}
